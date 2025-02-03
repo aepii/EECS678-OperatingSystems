@@ -48,20 +48,25 @@ static struct Node* createNode(int data)
     // Step 1: Allocate memory for the new node.
     // Hint: Use 'malloc(sizeof(struct Node))'.
     // Your Code Here
+    struct Node* newNode = malloc(sizeof(struct Node));
 
     // Step 2: Check if memory allocation was successful. Return NULL if it failed.
     // Hint: Check if newNode is NULL.
     // Your Code Here
+    if(newNode==NULL) {
+        return NULL; 
+    };
 
     // Step 3: Initialize the node with data and set 'next' to NULL.
     // Hint: newNode->data = data; newNode->next = NULL;
     // Your Code Here
+    newNode->data = data;
+    newNode->next = NULL;
 
     // Return the new node.
     // Your Code Here
-
+    return newNode;
     // Placeholder return statement to make the function compile without filling in the details
-    return NULL;
 }
 
 /*
@@ -85,24 +90,34 @@ static struct Node* insertAtEnd(struct Node* head, int data)
     // Step 1: Create a new node using 'createNode'. Handle NULL case if 'malloc' fails in 'createNode'.
     // Hint: Use the function 'createNode(int)' to allocate and initialize the new node.
     // Your Code Here
+    struct Node* nodeToInsert = createNode(data);
 
     // Step 2: Check if the list is empty.
     // Hint: If head is NULL, assign the new node to head.
     // Your Code Here
+    if(head==NULL) {
+        head = nodeToInsert;
+    } else {;
 
     // Step 3: If the list is not empty, traverse to the last node.
     // Hint: Use a loop to find the last node (where next is NULL).
     // Your Code Here
+        struct Node* temp = head;
+        while(temp->next!=NULL) {
+            temp = temp->next;
+        };
 
     // Step 4: Insert the new node at the end of the list.
     // Hint: Set the 'next' of the last node to the new node.
     // Your Code Here
+        temp->next = nodeToInsert;
+    }
 
     // Return the head of the list.
     // Your Code Here
+    return head;
 
     // Placeholder return statement to make the function compile without filling in the details
-    return NULL;
 }
 
 /*
@@ -122,18 +137,26 @@ static void printList(struct Node* head)
     // Step 1: Check if the list is empty.
     // Hint: If head is NULL, print "The list is empty."
     // Your Code Here
+    if(head==NULL) {
+        printf("The list is empty."); 
+    } else {
 
     // Step 2: Traverse the list starting from the head.
     // Hint: Use a while loop; continue until the current node is NULL.
     // Your Code Here
+        while(head!=NULL) {
 
     // Step 3: Print the data of each node.
     // Hint: Access the data of the node using the arrow operator (->).
     // Your Code Here
+            printf("%d ", head->data);
 
     // Step 4: Move to the next node.
     // Hint: Update the current node pointer to the next node in the list.
     // Your Code Here
+            head = head->next;
+        }
+    }
 }
 
 /*
@@ -153,14 +176,21 @@ static void deleteList(struct Node** head)
     // Step 1: Declare a pointer to hold the current node and a temporary node.
     // Hint: Use two pointers, one for the current node and another to hold the next node temporarily.
     // Your Code Here
+    struct Node* curNode = *head;
+    struct Node* tempNode = NULL;
 
     // Step 2: Traverse the list and free each node.
     // Hint: Use a loop. For each node, before freeing it, save the reference to the next node.
     // Your Code Here
+    for (; curNode != NULL; curNode = tempNode) {
+        tempNode = curNode->next; 
+        free(curNode);
+    }
 
     // Step 3: After all nodes are freed, set the head to NULL to indicate the list is empty.
     // Hint: It is crucial to reset the head pointer to NULL after freeing the nodes to avoid dangling pointers.
     // Your Code Here
+    *head = NULL;
 }
 
 
