@@ -5,7 +5,7 @@
 #include <signal.h>    /* signal name macros, and the signal() prototype */
 
 /* first, define the Ctrl-C counter, initialize it with zero. */
-int ctrl_c_count = 0;
+int ctrl_c_count = 0; 
 int got_response = 0;
 #define CTRL_C_THRESHOLD  5 
 
@@ -51,9 +51,13 @@ void catch_tstp(int sig_num)
 /* If the user DOES NOT RESPOND before the alarm time elapses, the program should exit */
 /* If the user RESPONDEDS before the alarm time elapses, the alarm should be cancelled */
 //YOUR CODE
-void alarm(int sig_num)
+void catch_alarm(int sig_num)
 {
-  // DO SOMETHING
+  if (!got_response) {
+    printf("\nUser did not respond. Program exiting...\n");
+    fflush(stdout);
+    exit(0);
+  }
 }
 
 int main(int argc, char* argv[])
@@ -78,16 +82,32 @@ int main(int argc, char* argv[])
   /* STEP - 4 (10 points) */
   /* ensure in the mask_set that the alarm signal does not get blocked while in another signal handler */
   //YOUR CODE
-  
-
+  sigdelset(&mask_set, SIGALRM);
   
   /* STEP - 5 (20 points) */
   /* set signal handlers for SIGINT, SIGTSTP and SIGALRM */
   //YOUR CODE
+  sa.sa_handler = catch_int; // Trigger catch_int when ctrl + c is pressed
+  sigaction(SIGINT, &sa, NULL);
+
+  sa.sa_handler = catch_tstp; // Trigger catch_tstp when ctrl + z is pressed
+  sigaction(SIGTSTP, &sa, NULL);
+
+  sa.sa_handler = catch_alarm; // Trigger catch_alarm after alarm signal finishes
+  sigaction(SIGALRM, &sa, NULL);
+  
   
   /* STEP - 6 (10 points) */
   /* ensure that the program keeps running to receive the signals */
   //YOUR CODE
+  while (1) {
+    alarm(5);
+    got_response = 0;
+
+    pause();
+
+    got_response = 1;
+  }
 
   return 0;
 }
