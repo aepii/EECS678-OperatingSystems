@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
     //STEP 3
     //Prepare a command string representing the find command (follow example from the slide)
     //Invoke execl for bash and find (use BASH_EXEC and FIND_EXEC as paths)
-    execl(FIND_EXEC, FIND_EXEC, argv[1],"-name '*'.[ch]", NULL);
+    execl(FIND_EXEC, "find", argv[1], "-name", "*.[ch]", NULL);
 
     exit(0);
   }
@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
 
     //STEP 5
     //Invoke execl for xargs and grep (use v and GREP_EXEC as paths)
-    execl(BASH_EXEC, XARGS_EXEC, GREP_EXEC, "-c", argv[2], NULL);
+    execl(XARGS_EXEC, "xargs", GREP_EXEC, "-c", argv[2], NULL);
 
     exit(0);
   }
@@ -101,7 +101,7 @@ int main(int argc, char *argv[])
 
     //STEP 7
     //Invoke execl for sort (use SORT_EXEC as path)
-    execl(SORT_EXEC, SORT_EXEC, "-t : +1.0 -2.0 --numeric --reverse", NULL);
+    execl(SORT_EXEC, "sort", "-t", ":", "+1.0", "-2.0", "--numeric", "--reverse", NULL);
 
     exit(0);
   }
@@ -124,7 +124,7 @@ int main(int argc, char *argv[])
 
     //STEP 8
     //Invoke execl for head (use HEAD_EXEC as path)
-    execl(HEAD_EXEC, HEAD_EXEC, "--lines=", argv[3], NULL);
+    execl(HEAD_EXEC, "head", "--lines=", argv[3], NULL);
 
     exit(0);
   }
